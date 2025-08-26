@@ -5,3 +5,4 @@ cmd # npm i
 # tailwind css with vite application setup
 # npm install react-router-dom 
 # need to add more thing into it
+# ok i am late but i will make changes
