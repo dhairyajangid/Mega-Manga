@@ -12,6 +12,10 @@ const UploaderSchema = new mongoose.Schema({
         type: String,
         require: true,
         unique: true
+    },
+    imageURL:{
+        type: String,
+        require: true
     }
 })
 
@@ -37,7 +41,12 @@ const UserSchema = new mongoose.Schema({
         require: true,
         unique: true
     },
-    Artist: [Uploader]
+    artists:[
+        {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Uploader"
+        }
+    ]
 
 })
 
