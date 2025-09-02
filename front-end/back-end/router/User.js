@@ -20,6 +20,15 @@ app.post('/signup', async(req,res)=>{
         })
     }
 
+    const user = User.Create({
+        email: String,
+        password: String,
+        firstname: String,
+        lastname: String,
+    })
+    const UserId = user._id;
+    
+
 })
 
 app.listen(port,()=>{
