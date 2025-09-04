@@ -6,6 +6,27 @@ mongoose.connect('mongodb://localhost:27017/',{})
 .then(()=>console.log("connect the DB") )
 .catch((e)=>console.log("error will connecting :",e));
 
+const NovelSchema = new mongoose.Schema({
+    NovelName:{
+        type: String,
+        require:true,
+        unique: true
+    },
+    artistName: {type: mongoose.Types.ObjectId, ref:"UploaderSchema"},
+    synpsis: {
+        type: String,
+        require: true,
+    },
+    genre: {type: String, require: true},
+    imageURL:{
+        type: String,
+        require: true,
+    },
+    noveltype:{type: String, require: true,},
+    rating:{type: Number}
+})
+
+
 
 const UploaderSchema = new mongoose.Schema({
     artistName:{

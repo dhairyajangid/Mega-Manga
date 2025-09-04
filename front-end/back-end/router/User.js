@@ -51,10 +51,10 @@ try{
 
     const userId = user._id;
 
-    const token = jwt.sign({
-        userId 
-    }, JWT_SECRET,
-    {expiresIn: "1h"}
+    const token = jwt.sign(
+        {userId},
+        JWT_SECRET,
+        {expiresIn: "1h"}
     );
 
     res.status(201).json({
@@ -72,6 +72,7 @@ try{
 
 router.post("/signin",async (req,res)=>{
     const {success} = UserSignin.safeParse(req.body);
+    
     if(!success){
         res.status(400).json({
             msg: "user not exist"
