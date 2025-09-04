@@ -8,17 +8,21 @@ const jwt = require('jsonwebtoken')
 const port = 3000;
 
 app.use(express.json());
-try{router.post('/signup', async(req,res)=>{
+try{
+    router.post('/signup', async(req,res)=>{
+    // using the zod input validation here
     const parsed = UserSignup.safeParse(req.body)
     if(!parsed.success){
         return res.status(400).json("invalid input format")
     }
+    // hashing the password here using bcrypt
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
 
+    // using mongo query here checking userexist or not
     const Userexist = await User.findOne({
         username: req.body.username
     });
-    
+
     if(Userexist){
         return res.status(411).json({
             msg: "user already exist"
@@ -31,6 +35,11 @@ try{router.post('/signup', async(req,res)=>{
     //     firstname: String,
     //     lastname: String,
     // })
+
+    // Note
+    // here we can use the object destucturing to write it like this 
+    // username : req.body.username, to this -> {username}
+
     const user = new User({
         username : req.body.username,
         password: hashedPassword,
@@ -57,7 +66,7 @@ try{router.post('/signup', async(req,res)=>{
 } catch(err){
     console.log(err);
     res.status(500).json({
-        msg: "server error";
+        msg: "server error"
     })
 }
 
