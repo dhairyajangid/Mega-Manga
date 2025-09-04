@@ -8,19 +8,19 @@ const jwt = require('jsonwebtoken')
 const port = 3000;
 
 app.use(express.json());
-
-router.post('/signup', async(req,res)=>{
+try{router.post('/signup', async(req,res)=>{
     const parsed = UserSignup.safeParse(req.body)
-    const hashedPassword = bcrypt.hash(password, 10)
     if(!parsed.success){
-        return res.status(400).json("error user not exist")
+        return res.status(400).json("invalid input format")
     }
+    const hashedPassword = await bcrypt.hash(req.body.password, 10)
+
     const Userexist = await User.findOne({
         username: req.body.username
     });
     
     if(Userexist){
-        res.status(411).json({
+        return res.status(411).json({
             msg: "user already exist"
         })
     }
@@ -31,14 +31,22 @@ router.post('/signup', async(req,res)=>{
     //     firstname: String,
     //     lastname: String,
     // })
-    const user = new User({username : String, password: hashedPassword})
+    const user = new User({
+        username : req.body.username,
+        password: hashedPassword,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email : req.body.email
+    })
     await user.save()
 
-    const UserId = user._id;
+    const userId = user._id;
 
     const token = jwt.sign({
-        UserId 
-    }, JWT_SECRET);
+        userId 
+    }, JWT_SECRET,
+    {expiresIn: "1h"}
+    );
 
     res.status(201).json({
         msg:"User singup successfully",
@@ -46,6 +54,12 @@ router.post('/signup', async(req,res)=>{
     })
 
 })
+} catch(err){
+    console.log(err);
+    res.status(500).json({
+        msg: "server error";
+    })
+}
 
 router.post("/signin",async (req,res)=>{
     const {success} = UserSignin.safeParse(req.body);
