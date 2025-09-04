@@ -7,59 +7,69 @@ mongoose.connect('mongodb://localhost:27017/',{})
 .catch((e)=>console.log("error will connecting :",e));
 
 const NovelSchema = new mongoose.Schema({
-    NovelName:{
+    novelName:{
         type: String,
-        require:true,
+        required:true,
         unique: true
     },
-    artistName: {type: mongoose.Types.ObjectId, ref:"UploaderSchema"},
-    synpsis: {
+    artist: {type: mongoose.Types.ObjectId, ref:"Uploader"},
+    
+    synopsis: {
         type: String,
-        require: true,
+        required: true,
     },
-    genre: {type: String, require: true},
+    genre: {type: [String], required: true},
+    
     imageURL:{
         type: String,
-        require: true,
+        required: true,
     },
-    noveltype:{type: String, require: true,},
-    rating:{type: Number}
-})
+    noveltype:{type: String, required: true,},
+    
+    rating: {
+        type: Number,
+        default: 0
+    },
+    releaseDate: {
+        type: Date,
+        default: Date.now
+    }
+},{timestamps: true})
 
 
 
 const UploaderSchema = new mongoose.Schema({
     artistName:{
         type: String,
-        require: true,
+        required: true,
         unique: true
     },
     imageURL:{
         type: String,
-        require: true
+        required: true
     }
-})
+},{timestamps: true})
 
 const UserSchema = new mongoose.Schema({
     UserName: {
         type: String,
-        require: true,
+        required: true,
     },
     firstName:{
         type: String,
-        require: true
+        required: true
     },
     lastName:{
         type: String,
-        require: true
+        required: true
     },
     password:{
         type: String,
-        require: true
+        required: true
     },
     email:{
         type: String,
-        require: true,
+        required: true,
         unique: true
     },
     artists:[
@@ -69,9 +79,12 @@ const UserSchema = new mongoose.Schema({
         }
     ]
 
-})
+},{timestamps: true})
 
 
 
 const User = mongoose.model('User', UserSchema);
-const Upload = mongoose.model('upload', UploaderSchema);
+const Uploader = mongoose.model('Uploader', UploaderSchema);
+const Novel = mongoose.model('Novel', NovelSchema);
+
+module.exports = {User, Uploader, Novel}
