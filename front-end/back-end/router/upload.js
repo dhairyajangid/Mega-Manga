@@ -15,3 +15,23 @@ router.get("/novel", async(req,res)=>{
     }
 })
 
+router.post("/upload",(req,res)=>{
+    
+})
+
+router.get("/bulk", async(req,res)=>{
+    try{
+    const filter = req.query.filter || "";
+    
+    const novel = await Novel.find({
+        novelName: {$regex: filter, $options:"i"}
+    }).select("imageURL novelName rating");
+    
+    res.json(novel);
+    }catch(err){
+        res.status(500).json({
+            error: err.message
+        })
+    }
+})
+
