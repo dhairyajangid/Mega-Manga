@@ -1,6 +1,6 @@
 import { JWT_SECRET } from '../config';
 import { UserSignin, UserSignup } from '../userValidation';
-import {User, Upload} from '../db';
+import {User} from '../db';
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt')    
