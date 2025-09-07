@@ -2,21 +2,26 @@ const jwt = require ('jsonwebtoken')
 const JWT_SECRET = require('./config')
 
 
-export const authToken = (req,res,next)=>{
-        const token = req.header.autherization.split(" ")[1];
-        if(!token || !token.startswith('barer ')){
-            res.status(401).json({
-                msg :console.log('token is not valid for user')
+const authToken = (req,res,next)=>{
+    try{
+        const authHeader = req.headers.authorization;
+        if(!authHeader || !authHeader.startsWith('Bearer ')){
+            return res.status(401).json({
+                msg :'token is not valid for user'
             })
         }
-        try{
+
+        const token = authHeader.split(" ")[1];
+
+        
         const decoded = jwt.verify(token, JWT_SECRET);
         req.user = decoded;
         next();
-        }
+    }
         catch(err){
-            res.status(411).json({
+            return res.status(403).json({
                 error: "Invalid token"
             })
         }
 };
+module.exports = authToken;
