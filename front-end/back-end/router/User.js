@@ -52,7 +52,10 @@ try{
     const userId = user._id;
 
     const token = jwt.sign(
-        {userId},
+        {
+          userId,
+          email: user.email
+        },
         JWT_SECRET,
         {expiresIn: "1h"}
     );
@@ -79,8 +82,25 @@ router.post("/signin",async (req,res)=>{
         })
     }
     const user = await User.findOne({
-        email: String,
-        password: String
+        email: req.body.email,
+        password: req.body.password
+    })
+
+    if(user){
+        const token = jwt.sign({
+            userId: user._id,
+            email: user.email
+        },JWT_SECRET,
+        {expiresIn: "1h"});
+
+        res.json({
+            token: token
+        })
+        return;
+    }
+
+    res.status(411).json({
+        msg: "Error while signin"
     })
 })
 

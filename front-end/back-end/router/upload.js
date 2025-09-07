@@ -14,7 +14,7 @@ router.get("/novel", async(req,res)=>{
     }
 })
 
-router.post("/upload",(req,res)=>{
+router.post("/upload",(req,res, next)=>{
     
 })
 
