@@ -1,4 +1,4 @@
-import { JWT_SECRET } from '../config';
+import { JWT_SECRET } from '../config/config';
 import { UserSignin, UserSignup } from '../userValidation';
 import {User} from '../db';
 const express = require('express');
