@@ -14,10 +14,11 @@ export const UserSignin = z.object({
 export const novelVal = z.object({
     synopsis: z.string().min(20).max(500),
     novelName: z.string().min(3),
+    novelType: z.enum(["Light Novel","Web Novel","Manga","Manhua","Manhwa","Other"]),
     artist: z.string().min(6),
     genre: z.array(z.string()), // here in mongo schema genre is array of string not single string that why.
     imageURL: z.string().url(),
-    releaseDate: z.string().datetime(),
+    releaseDate: z.coerce.date().optional(), // here the coerce convert the data into an valide date object becuase coerce is used for forcefully converting into another type 
     rating: z.number().min(0).max(5)
 
 })

@@ -1,5 +1,5 @@
 const express = require('express');
-
+const authToken = require('./middleware.js')
 import {Uploader, Novel} from "../db";
 const router = express.Router();
 
@@ -14,7 +14,7 @@ router.get("/novel", async(req,res)=>{
     }
 })
 
-router.post("/upload",(req,res, next)=>{
+router.post("/upload",authToken,(req,res, next)=>{
     
 })
 

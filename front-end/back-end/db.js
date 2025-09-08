@@ -13,7 +13,7 @@ const NovelSchema = new mongoose.Schema({
         unique: true
     },
     artist: {type: mongoose.Types.ObjectId, ref:"Uploader"},
-    
+    uploadBy: {type: mongoose.Types.ObjectId, ref: "User"},
     synopsis: {
         type: String,
         required: true,
