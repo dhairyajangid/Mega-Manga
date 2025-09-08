@@ -35,3 +35,65 @@ router.get("/bulk", async(req,res)=>{
 })
 
 export default router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// here is the upload with only imageURL, authToken without multer and cloudinary looks like ->
+// Zod schema for validating image URL
+
+
+
+
+// const imageSchema = z.object({
+//   imageUrl: z.string().url(), // ensures it's a valid HTTP/HTTPS URL
+// });
+
+// // POST /upload
+// router.post("/", authMiddleware, async (req, res) => {
+//   try {
+//     // Validate body with zod
+//     const validatedData = imageSchema.parse(req.body);
+
+//     // Save into DB (only the URL)
+//     const newImage = await Image.create({
+//       userId: req.user._id, // from auth token
+//       imageUrl: validatedData.imageUrl,
+//     });
+
+//     res.status(201).json({
+//       success: true,
+//       message: "Image URL stored successfully",
+//       data: newImage,
+//     });
+//   } catch (err) {
+//     res.status(400).json({
+//       success: false,
+//       message: err.message,
+//     });
+//   }
+// });
