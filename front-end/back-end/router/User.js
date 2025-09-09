@@ -77,34 +77,38 @@ try{
 
 
 router.post("/signin",async (req,res)=>{
-    const {success} = UserSignin.safeParse(req.body);
+    const parsed = UserSignin.safeParse(req.body);
     
-    if(!success){
-        res.status(400).json({
+    if(!parsed.success){
+        return res.status(400).json({
             msg: "user not exist"
         })
     }
-    const user = await User.findOne({
-        email: req.body.email,
-        password: req.body.password
-    })
+    const {email, password} = parsed.data;
 
-    if(user){
-        const token = jwt.sign({
-            userId: user._id,
-            email: user.email
-        },JWT_SECRET,
-        {expiresIn: "1h"});
+    const user = await User.findOne({email}); // here this email is check by zod validation thats why it in {}
 
-        res.json({
-            token: token
+    if(!user){
+        return res.status(404).json({
+            msg: "user not found"
         })
-        return;
     }
 
-    res.status(411).json({
-        msg: "Error while signin"
+    const isCheck = await bcrypt.compare(password, user.password);
+    if(!isCheck){
+        return res.status(401).json({ msg: "Incorrect password" });
+    }
+    
+    const token = jwt.sign({
+        userId: user._id,
+        email: user.email
+    },JWT_SECRET,
+    {expiresIn: "1h"});
+
+    res.json({
+        token: token
     })
+    
 })
 
 
