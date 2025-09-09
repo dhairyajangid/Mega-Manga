@@ -3,8 +3,11 @@
     "@tailwindcss/vite": "^4.1.12",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "imagekit": "^6.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.0",
+    "multer": "^2.0.2",
     "tailwindcss": "^4.1.12"
   }
 }
