@@ -76,12 +76,12 @@ try{
 
 
 
-router.post("/signin",async (req,res)=>{
+router.post("/signin",signinLimiter,async (req,res)=>{
     const parsed = UserSignin.safeParse(req.body);
     
     if(!parsed.success){
         return res.status(400).json({
-            msg: "user not exist"
+            msg: "invalid input"
         })
     }
     const {email, password} = parsed.data;
