@@ -1,6 +1,7 @@
 const express = require('express');
 const authToken = require('./middleware.js')
 import {Uploader, Novel} from "../db";
+import { fileUpload } from "../userValidation.js";
 const router = express.Router();
 
 router.get("/novel", async(req,res)=>{
@@ -15,7 +16,17 @@ router.get("/novel", async(req,res)=>{
 })
 
 router.post("/upload",authToken,(req,res, next)=>{
-    
+    const isUpload = fileUpload.safeParse(req.body);
+    if(!isUpload){
+        res.status(404).json({
+            msg: "your novel not uploaded"
+        })
+    }
+    const artist = Uploader.findone({
+        artistName: req.body.artistName,
+        imageURL: req.body.imageURL
+    })
+
 })
 
 router.get("/bulk", async(req,res)=>{

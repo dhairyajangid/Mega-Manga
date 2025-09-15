@@ -109,9 +109,7 @@ router.post("/signin",signinLimiter,async (req,res)=>{
         token: token
     })
     
-})
-
-
+});
 
 
 app.listen(port,()=>{
