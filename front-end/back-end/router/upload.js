@@ -15,17 +15,33 @@ router.get("/novel", async(req,res)=>{
     }
 })
 
-router.post("/upload",authToken,(req,res, next)=>{
-    const isUpload = fileUpload.safeParse(req.body);
-    if(!isUpload){
-        res.status(404).json({
-            msg: "your novel not uploaded"
-        })
+router.post("/upload",authToken,async (req,res, next)=>{
+    const fileMeta = {
+        mimetype: req.file.mimetype,
+        size: req.file.size
     }
-    const artist = Uploader.findone({
-        artistName: req.body.artistName,
-        imageURL: req.body.imageURL
-    })
+    const isUpload = fileMeta.safeParse(req.file);
+    if(!isUpload){
+        return res.status(400).json({
+            msg: "invalid file type or size"
+        }); 
+    }
+    const uploadImage = await imageKit.upload({
+        file: req.file.buffer,
+        fileName: req.file.originalname
+    });
+
+    const newUpload = new Uploader({
+        aritistName: req.body.aritistName,
+        imageURL: uploadRespose.url,
+        uploadBy: req.user.userId
+    });
+    await newUpload.save();
+    
+    res.status(201).json({
+            msg: "Novel uploaded successfully",
+            data: newUpload
+    });
 
 })
 
