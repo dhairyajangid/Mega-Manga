@@ -16,7 +16,8 @@ router.get("/novel", async(req,res)=>{
 })
 
 router.post("/upload",authToken,async (req,res, next)=>{
-    const fileMeta = {
+    try
+    {const fileMeta = {
         mimetype: req.file.mimetype,
         size: req.file.size
     }
@@ -41,7 +42,13 @@ router.post("/upload",authToken,async (req,res, next)=>{
     res.status(201).json({
             msg: "Novel uploaded successfully",
             data: newUpload
-    });
+    });}
+    catch(err){
+        console.log(err);
+        res.status(500).json({
+            msg: "something went wrong", err: err.message
+        })
+    }
 
 })
 
