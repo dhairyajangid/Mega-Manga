@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt')    
 const jwt = require('jsonwebtoken')
-const port = 3000;
+
 
 app.use(express.json());
 try{
@@ -110,9 +110,4 @@ router.post("/signin",signinLimiter,async (req,res)=>{
     })
     
 });
-
-
-app.listen(port,()=>{
-    console.log(`the server is running on ${port}`);
-})
 
