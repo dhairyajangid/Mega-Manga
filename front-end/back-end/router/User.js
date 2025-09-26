@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt')    
 const jwt = require('jsonwebtoken')
-
+require("dotenv").config();
 
 app.use(express.json());
 try{
@@ -56,7 +56,7 @@ try{
           userId,
           email: user.email
         },
-        JWT_SECRET,
+        process.env.JWT_SECRET,
         {expiresIn: "1h"}
     );
 
@@ -102,7 +102,7 @@ router.post("/signin",signinLimiter,async (req,res)=>{
     const token = jwt.sign({
         userId: user._id,
         email: user.email
-    },JWT_SECRET,
+    }, process.env.JWT_SECRET,
     {expiresIn: "1h"});
 
     res.json({
@@ -111,3 +111,4 @@ router.post("/signin",signinLimiter,async (req,res)=>{
     
 });
 
+module.export = router;
