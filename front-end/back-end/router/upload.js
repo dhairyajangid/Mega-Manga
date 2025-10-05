@@ -6,7 +6,12 @@ const router = express.Router();
 
 router.get("/novel", async(req,res)=>{
     try{
-        const novel = await Novel.find({},"imageURL novelName rating");
+        const novel = await Novel.find({},"imageURL novelName rating synopsis genre releaseDate uploadBy");
+        if(!novel){
+            return res.status(401).json({
+                msg: "novel not found"
+            });
+        }
         res.status(200).json(novel)
     }catch(err){
         res.status(500).json({

@@ -106,6 +106,8 @@ router.post("/signin",signinLimiter,async (req,res)=>{
     {expiresIn: "1h"});
 
     res.json({
+        
+        UserName: user.UserName,
         token: token
     })
     
