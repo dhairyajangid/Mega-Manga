@@ -1,8 +1,10 @@
 const express = require('express');
-const authToken = require('./middleware.js')
-import {Uploader, Novel} from "../db";
-import { fileUpload } from "../userValidation.js";
+const { Uploader, Novel } = require('../db');
+const { fileUpload } = require('../userValidation');
+const authToken = require('./middleware');
 const router = express.Router();
+const upload = require ("../middleware/upload.js");
+require("dotenv").config;
 
 router.get("/novel", async(req,res)=>{
     try{
@@ -38,7 +40,7 @@ router.post("/upload",authToken,upload.single("image"), async (req,res, next)=>{
     });
 
     const newUpload = new Uploader({
-        aritistName: req.body.aritistName,
+        artistName: req.body.artistName,
         imageURL: uploadImage.url,
         uploadBy: req.user.userId
     });
