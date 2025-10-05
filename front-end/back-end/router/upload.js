@@ -20,7 +20,7 @@ router.get("/novel", async(req,res)=>{
     }
 })
 
-router.post("/upload",authToken,async (req,res, next)=>{
+router.post("/upload",authToken,upload.single("image"), async (req,res, next)=>{
     try
     {const fileMeta = {
         mimetype: req.file.mimetype,
@@ -39,7 +39,7 @@ router.post("/upload",authToken,async (req,res, next)=>{
 
     const newUpload = new Uploader({
         aritistName: req.body.aritistName,
-        imageURL: uploadRespose.url,
+        imageURL: uploadImage.url,
         uploadBy: req.user.userId
     });
     await newUpload.save();
@@ -47,7 +47,8 @@ router.post("/upload",authToken,async (req,res, next)=>{
     res.status(201).json({
             msg: "Novel uploaded successfully",
             data: newUpload
-    });}
+    });
+    }
     catch(err){
         console.log(err);
         res.status(500).json({
@@ -55,7 +56,7 @@ router.post("/upload",authToken,async (req,res, next)=>{
         })
     }
 
-})
+});
 
 router.get("/bulk", async(req,res)=>{
     try{
