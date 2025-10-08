@@ -16,3 +16,5 @@ const upload = multer({
     limits:{filesize:5*1024*1024},
     fileFilter
 });
+
+export default upload;
