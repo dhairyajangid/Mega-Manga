@@ -2,7 +2,8 @@
 
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/',{})
+const DB_URL = process.env.atlas_URL;
+mongoose.connect(DB_URL,{})
 .then(()=>console.log("connect the DB") )
 .catch((e)=>console.log("error will connecting :",e));
 

@@ -57,8 +57,25 @@ router.post("/upload",authToken,upload.single("image"), async (req,res, next)=>{
             msg: "something went wrong", err: err.message
         })
     }
+    next();
+});
+
+router.post("/novel/:id/upvote",(req,res)=>{
+    
+});
+
+router.get("/novel/:id/trending",(req,res)=>{
 
 });
+
+router.put("/novel/:id",authToken,(req,res, next)=>{
+
+});
+
+router.delete("/novel/:id",authToken,(req,res,next)=>{
+
+});
+
 
 router.get("/bulk", async(req,res)=>{
     try{
