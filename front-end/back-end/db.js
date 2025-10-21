@@ -13,12 +13,15 @@ const NovelSchema = new mongoose.Schema({
         required:true,
         unique: true
     },
+
     artist: {type: mongoose.Types.ObjectId, ref:"Uploader"},
     uploadBy: {type: mongoose.Types.ObjectId, ref: "User"},
+    
     synopsis: {
         type: String,
         required: true,
     },
+    
     genre: {type: [String], required: true},
     
     imageURL:{
@@ -27,6 +30,15 @@ const NovelSchema = new mongoose.Schema({
     },
     noveltype:{type: String, required: true,},
     
+    view:{
+        type: Number,
+        default: 0
+    },
+
+    bookmarks: { type: Number, default: 0 },
+    
+    commentsCount: { type: Number, default: 0 },
+
     rating: {
         type: Number,
         default: 0
@@ -47,14 +59,21 @@ const UploaderSchema = new mongoose.Schema({
     },
     imageURL:{
         type: String,
-        required: true
+        default: " "
     }
 },{timestamps: true})
 
 const UserSchema = new mongoose.Schema({
     UserName: {
         type: String,
+        unique: true,
+        trim: true,
+        lowercase: true,
         required: true,
+    },
+    artistName:{
+        type: String,
+        default: ""
     },
     firstName:{
         type: String,
@@ -72,6 +91,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    profileImage:{
+        type: String,
+        default: " "
     },
     artists:[
         {
