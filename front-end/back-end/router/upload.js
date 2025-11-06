@@ -60,8 +60,24 @@ router.post("/upload",authToken,upload.single("image"), async (req,res, next)=>{
     next();
 });
 
-router.post("/novel/:id/upvote",(req,res)=>{
-    
+router.post("/novel/:id/upvote",async(req,res)=>{
+    try {const {id} = req.params;
+    const novel = await Novel.findById(id);
+    if(!novel){
+        res.status(404).json({
+            msg: "Novel not found"
+        })
+    }
+    novel.upvote +=1;
+    await novel.save();
+
+    res.status(200).json({
+        Upvote: novel.upvote
+    });
+}catch(err){
+    res.status(500).json({msg: "Error while upvoting", err});
+}
+
 });
 
 router.get("/novel/:id/trending",(req,res)=>{

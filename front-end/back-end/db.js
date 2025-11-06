@@ -21,7 +21,7 @@ const NovelSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    
+
     genre: {type: [String], required: true},
     
     imageURL:{
@@ -30,7 +30,7 @@ const NovelSchema = new mongoose.Schema({
     },
     noveltype:{type: String, required: true,},
     
-    view:{
+    views:{
         type: Number,
         default: 0
     },
