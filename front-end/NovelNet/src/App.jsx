@@ -1,14 +1,7 @@
+import AuthPage from "./pages/AuthPage";
 
-import './App.css';
-import Header from './components/Header';
 function App() {
-
-
-  return (
-    <>
-      <Header/>
-    </>
-  )
+  return <AuthPage />;
 }
 
-export default App
+export default App;

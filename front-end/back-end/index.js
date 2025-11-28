@@ -1,6 +1,6 @@
-const express = require('express');
-const rootRouter = require('./router/index.js')
-const cors = require('cors')
+import express from "express";
+import rootRouter from "./router/index.js";
+import cors from "cors";
 
 const app = express();
 const port = 3000;
@@ -18,4 +18,4 @@ app.listen(port, ()=> {
     console.error('server failed to start', err.message);
 });
 
-module.exports = app;
+export default app;

@@ -1,10 +1,10 @@
-const express = require('express');
-const userRouter = require('./User');
-const uploadRouter = require('./upload');
+import express from 'express';
+import userRouter from './User.js';
+import uploadRouter from './upload.js';
 
 const router = express.Router();
 
-router.use("/User",userRouter);
+router.use('/User', userRouter);
 router.use('/upload', uploadRouter);
 
-module.exports = router;
+export default router;

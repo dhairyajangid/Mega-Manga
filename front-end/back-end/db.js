@@ -1,8 +1,10 @@
 // first need to create the docker file that have the image of the mongoDB So, I can run the mongo
+import dotenv from "dotenv";
+dotenv.config();
 
-const mongoose = require('mongoose');
-
+import mongoose from "mongoose";
 const DB_URL = process.env.atlas_URL;
+
 mongoose.connect(DB_URL,{})
 .then(()=>console.log("connect the DB") )
 .catch((e)=>console.log("error will connecting :",e));
@@ -111,4 +113,4 @@ const User = mongoose.model('User', UserSchema);
 const Uploader = mongoose.model('Uploader', UploaderSchema);
 const Novel = mongoose.model('Novel', NovelSchema);
 
-module.exports = {User, Uploader, Novel}
+export { User, Uploader, Novel };

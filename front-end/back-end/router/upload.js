@@ -1,10 +1,15 @@
-const express = require('express');
-const { Uploader, Novel } = require('../db');
-const { fileUpload } = require('../userValidation');
-const authToken = require('./middleware');
+import express from 'express';
+import { Uploader, Novel } from '../db.js';
+import { fileUpload } from '../userValidation.js';
+import authToken from '../middleware/middleware.js';
+import upload from '../middleware/upload.js';
+import imageKit from '../config/imageKit.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const router = express.Router();
-const upload = require ("../middleware/upload.js");
-require("dotenv").config;
+
 
 router.get("/novel", async(req,res)=>{
     try{
@@ -22,43 +27,46 @@ router.get("/novel", async(req,res)=>{
     }
 })
 
-router.post("/upload",authToken,upload.single("image"), async (req,res, next)=>{
-    try
-    {const fileMeta = {
-        mimetype: req.file.mimetype,
-        size: req.file.size
+router.post("/upload", authToken, upload.single("image"), async (req, res) => {
+  try {
+    const fileMeta = {
+      mimetype: req.file.mimetype,
+      size: req.file.size
+    };
+
+    const validated = fileUpload.safeParse(fileMeta);
+    if (!validated.success) {
+      return res.status(400).json({
+        msg: "invalid file type or size"
+      });
     }
-    const isUpload = fileMeta.safeParse(req.file);
-    if(!isUpload){
-        return res.status(400).json({
-            msg: "invalid file type or size"
-        }); 
-    }
+
     const uploadImage = await imageKit.upload({
-        file: req.file.buffer,
-        fileName: req.file.originalname
+      file: req.file.buffer.toString("base64"),
+      fileName: req.file.originalname
     });
 
     const newUpload = new Uploader({
-        artistName: req.body.artistName,
-        imageURL: uploadImage.url,
-        uploadBy: req.user.userId
+      artistName: req.body.artistName,
+      imageURL: uploadImage.url,
+      uploadBy: req.user.userId
     });
+
     await newUpload.save();
-    
+
     res.status(201).json({
-            msg: "Novel uploaded successfully",
-            data: newUpload
+      msg: "Novel uploaded successfully",
+      data: newUpload
     });
-    }
-    catch(err){
-        console.log(err);
-        res.status(500).json({
-            msg: "something went wrong", err: err.message
-        })
-    }
-    next();
+
+  } catch (err) {
+    res.status(500).json({
+      msg: "something went wrong",
+      error: err.message
+    });
+  }
 });
+
 
 router.post("/novel/:id/upvote",async(req,res)=>{
     try {const {id} = req.params;
@@ -77,20 +85,31 @@ router.post("/novel/:id/upvote",async(req,res)=>{
 }catch(err){
     res.status(500).json({msg: "Error while upvoting", err});
 }
+});
+
+router.get("/novel/:id/trending",async (req,res)=>{
+    const {id} = req.params;
+    const novel = await Novel.findById(id);
+
+    if(!novel){
+        res.status(404).json({
+            msg: "novel not found"
+        })
+    }
+    
+    novel.isTrending = true;
+    
+
 
 });
 
-router.get("/novel/:id/trending",(req,res)=>{
+// router.put("/novel/:id",authToken,(req,res, next)=>{
+    
+// });
 
-});
+// router.delete("/novel/:id",authToken,(req,res,next)=>{
 
-router.put("/novel/:id",authToken,(req,res, next)=>{
-
-});
-
-router.delete("/novel/:id",authToken,(req,res,next)=>{
-
-});
+// });
 
 
 router.get("/bulk", async(req,res)=>{
@@ -107,10 +126,9 @@ router.get("/bulk", async(req,res)=>{
             error: err.message
         })
     }
-})
+});
 
 export default router;
-
 
 
 

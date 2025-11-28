@@ -1,30 +1,36 @@
-import { JWT_SECRET } from '../config/config';
-import { UserSignin, UserSignup } from '../userValidation';
-import {User} from '../db';
-const express = require('express');
-const router = express.Router();
-const bcrypt = require('bcrypt')    
-const jwt = require('jsonwebtoken')
-require("dotenv").config();
+import { UserSignin, UserSignup } from '../userValidation.js';
+import { User } from '../db.js';
+import signinLimiter from '../middleware/rateLimite.js';
+import express from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-app.use(express.json());
-try{
+dotenv.config();
+
+const router = express.Router();
+
+// app.use(express.json());
+
     router.post('/signup', async(req,res)=>{
     // using the zod input validation here
     const parsed = UserSignup.safeParse(req.body)
     if(!parsed.success){
         return res.status(400).json("invalid input format")
     }
+
+     const { firstname, lastname, email, password, username } = parsed.data;
+
     // hashing the password here using bcrypt
-    const hashedPassword = await bcrypt.hash(req.body.password, 10)
+    const hashedPassword = await bcrypt.hash(password, 10)
 
     // using mongo query here checking userexist or not
     const Userexist = await User.findOne({
-        username: req.body.username
+        $or: [{ email }, { username }]
     });
 
     if(Userexist){
-        return res.status(411).json({
+        return res.status(409).json({
             msg: "user already exist"
         })
     }
@@ -41,12 +47,13 @@ try{
     // username : req.body.username, to this -> {username}
 
     const user = new User({
-        username : req.body.username,
-        password: hashedPassword,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email : req.body.email
-    })
+    UserName: username,
+    firstName: firstname,
+    lastName: lastname,
+    password: hashedPassword,
+    email   
+    });
+
     await user.save()
 
     const userId = user._id;
@@ -65,19 +72,12 @@ try{
         token: token
     })
 
+
 })
-} catch(err){
-    console.log(err);
-    res.status(500).json({
-        msg: "server error"
-    })
-}
-
-
 
 
 router.post("/signin",signinLimiter,async (req,res)=>{
-    const parsed = UserSignin.safeParse(req.body);
+    try{const parsed = UserSignin.safeParse(req.body);
     
     if(!parsed.success){
         return res.status(400).json({
@@ -110,9 +110,13 @@ router.post("/signin",signinLimiter,async (req,res)=>{
         UserName: user.UserName,
         token: token
     })
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({ msg: "server error" });
+    }
     
 });
 
 
-
-module.export = router;
+export default router;
