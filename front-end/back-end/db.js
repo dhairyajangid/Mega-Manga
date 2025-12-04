@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import mongoose from "mongoose";
-const DB_URL = process.env.atlas_URL;
+const DB_URL = process.env.Atlas_URL;
 
 mongoose.connect(DB_URL,{})
 .then(()=>console.log("connect the DB") )
@@ -22,6 +22,11 @@ const NovelSchema = new mongoose.Schema({
     synopsis: {
         type: String,
         required: true,
+    },
+
+    upvote: {
+    type: Number,
+    default: 0
     },
 
     genre: {type: [String], required: true},
