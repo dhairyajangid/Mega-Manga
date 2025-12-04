@@ -1,12 +1,21 @@
-import { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useState, useEffect } from "react";
+import { useRecoilState } from "recoil";
 import { userAtom } from "../../atoms/userAtom";
+import { getUserData } from "../../services/authAPI";
 import SearchBar from "./SearchBar";
 import ProfileDropdown from "./ProfileDropdown";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const user = useRecoilValue(userAtom);
+  const [user, setUser] = useRecoilState(userAtom);
+
+  // Load user data from localStorage on component mount
+  useEffect(() => {
+    const userData = getUserData();
+    if (userData.username) {
+      setUser(userData);
+    }
+  }, [setUser]);
 
   return (
     <nav className="w-full h-16 bg-[#111] text-white flex items-center px-6 justify-between shadow-md">
@@ -34,12 +43,13 @@ export default function Navbar() {
         {/* PROFILE */}
         <div className="relative">
           <img
-            src={user.avatar}
+            src={user.avatar || "/default-avatar.png"}
             className="w-10 h-10 rounded-full cursor-pointer border border-gray-700"
             onClick={() => setOpen(!open)}
+            alt="profile"
           />
 
-          {open && <ProfileDropdown />}
+          {open && <ProfileDropdown onClose={() => setOpen(false)} />}
         </div>
       </div>
     </nav>

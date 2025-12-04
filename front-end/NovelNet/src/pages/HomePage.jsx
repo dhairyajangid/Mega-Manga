@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import novelsAtom from "../atoms/novelsAtom";
-
+import Navbar from "../components/Navbar/Navbar";
 import Carousel from "../components/Home/Carousel";
 import FeaturedSection from "../components/Home/FeaturedSection";
 import NovelGrid from "../components/Home/NovelGrid";
@@ -46,7 +46,9 @@ const HomePage = () => {
   };
 
   return (
+   
     <div className="min-h-screen bg-black">
+      <Navbar />
       <Carousel />
       <FeaturedSection />
       <div className="max-w-[1400px] mx-auto px-6 py-8 flex gap-8">

@@ -99,9 +99,10 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    profileImage:{
+    
+    avatar:{
         type: String,
-        default: " "
+        default:"https://ik.imagekit.io/Tenkai123/authBackground/no_profile_s.png"
     },
     artists:[
         {
