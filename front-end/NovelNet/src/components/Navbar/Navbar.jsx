@@ -4,11 +4,13 @@ import { userAtom } from "../../atoms/userAtom";
 import { getUserData } from "../../services/authAPI";
 import SearchBar from "./SearchBar";
 import ProfileDropdown from "./ProfileDropdown";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useRecoilState(userAtom);
 
+  const navigate = useNavigate();
   // Load user data from localStorage on component mount
   useEffect(() => {
     const userData = getUserData();
@@ -22,7 +24,9 @@ export default function Navbar() {
 
       {/* LEFT LOGO */}
       <div className="text-2xl font-bold cursor-pointer">
-        NovelNet
+        <button onClick={()=> navigate('/')}>
+          NovelNet
+        </button>
       </div>
 
       {/* CENTER SEARCH */}

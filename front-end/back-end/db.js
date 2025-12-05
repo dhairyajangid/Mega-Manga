@@ -64,10 +64,7 @@ const UploaderSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    imageURL:{
-        type: String,
-        default: " "
-    }
+    
 },{timestamps: true})
 
 const UserSchema = new mongoose.Schema({
@@ -104,12 +101,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default:"https://ik.imagekit.io/Tenkai123/authBackground/no_profile_s.png"
     },
-    artists:[
-        {
+    artists:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Uploader"
-        }
-    ]
+    }]
+    
 
 },{timestamps: true})
 

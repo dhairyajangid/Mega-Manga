@@ -1,6 +1,7 @@
     import { UserSignin, UserSignup } from '../userValidation.js';
     import { User } from '../db.js';
     import signinLimiter from '../middleware/rateLimite.js';
+    import authToken from '../middleware/middleware.js';
     import express from 'express';
     import bcrypt from 'bcrypt';
     import jwt from 'jsonwebtoken';
@@ -122,5 +123,17 @@
         
     });
 
+    // In your backend
+    router.get("/artists", authToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.userId).populate("artists");
+
+        res.json({
+            artists: user?.artists ?? []   // FIXED
+        });
+    } catch (err) {
+        res.status(500).json({ msg: "Failed to fetch artists" });
+    }
+});
 
     export default router;

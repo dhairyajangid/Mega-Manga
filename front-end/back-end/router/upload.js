@@ -89,7 +89,7 @@ router.post("/novel", authToken, upload.single("image"), async (req, res) => {
       novelName: req.body.novelName,
       synopsis: req.body.synopsis,
       novelType: req.body.novelType,
-      artist: req.body.artist,
+      // artist: req.body.artist,
       genre: Array.isArray(req.body.genre) ? req.body.genre : [req.body.genre],
       rating: parseFloat(req.body.rating), // Convert string to number
       releaseDate: req.body.releaseDate ? req.body.releaseDate : undefined
@@ -121,7 +121,7 @@ router.post("/novel", authToken, upload.single("image"), async (req, res) => {
       synopsis: data.synopsis,
       genre: data.genre,
       noveltype: data.novelType,
-      artist: data.artist,
+      // artist: data.artist,
       rating: data.rating,
       releaseDate: data.releaseDate,
       imageURL: uploadedImage.url,

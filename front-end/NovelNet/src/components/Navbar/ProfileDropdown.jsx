@@ -9,7 +9,7 @@ export default function ProfileDropdown({ onClose }) {
 
   const handleLogout = () => {
     logoutAPI();
-    navigate("/auth");
+    navigate("/User");
   };
 
   return (

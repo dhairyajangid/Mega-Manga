@@ -2,35 +2,42 @@ import { useState, useEffect } from "react";
 import { authImages } from "../../data/authImages";
 
 export default function AuthBackground() {
-  const [index, setIndex] = useState(0);
-  const [fade, setFade] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [nextIndex, setNextIndex] = useState(1);
 
   useEffect(() => {
-    const changeImage = () => {
-      // trigger fade-out
-      setFade(true);
-
-      // wait for fade animation to finish, then switch image
+    const interval = setInterval(() => {
+      setNextIndex((prev) => (prev + 1) % authImages.length);
+      
+      // Delay the current index update to create crossfade
       setTimeout(() => {
-        setIndex((prev) => (prev + 1) % authImages.length);
-        setFade(false); // fade-in back
-      }, 700); // matches CSS duration
-    };
-
-    const interval = setInterval(changeImage, 10000);
+        setCurrentIndex((prev) => (prev + 1) % authImages.length);
+      }, 1000); // Half of transition duration
+      
+    }, 6000); // Change image every 6 seconds
 
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="fixed inset-0 w-full h-full overflow-hidden">
-      {/* Background image with fade animation */}
+      {/* Static dark overlay for better text readability - doesn't animate */}
+      <div className="absolute inset-0 bg-black/40 z-[5] pointer-events-none"></div>
+      
+      {/* Bottom layer - Current image */}
       <div
-        className={`absolute inset-0 bg-cover bg-center transition-opacity duration-700 ${
-          fade ? "opacity-0" : "opacity-100"
-        }`}
+        className="absolute inset-0 bg-cover bg-center z-[1]"
         style={{
-          backgroundImage: `url(${authImages[index]})`,
+          backgroundImage: `url(${authImages[currentIndex]})`,
+        }}
+      ></div>
+
+      {/* Top layer - Next image that fades in */}
+      <div
+        className="absolute inset-0 bg-cover bg-center transition-opacity duration-[3000ms] ease-in-out z-[2]"
+        style={{
+          backgroundImage: `url(${authImages[nextIndex]})`,
+          opacity: nextIndex !== (currentIndex + 1) % authImages.length ? 1 : 0,
         }}
       ></div>
     </div>
